@@ -216,3 +216,6 @@ __marimo__/
 
 # Streamlit
 streamlit_app/.streamlit/secrets.toml
+
+# test folder to save preliminary results
+test_ignore/
