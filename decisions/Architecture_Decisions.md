@@ -1,3 +1,35 @@
+# Project Description
+
+## Research Question
+
+- Since ChatGPT dropped in 2022 and especially with the rise of tools like Claude Code or OpenClaw by Peter Steinberger, Github repositories focused on LLMs and Agentic AI are accumulating stars that took foundational ML libraries years to reach. This is partly because coding and building applications became accessible to a much wider audience, meaning more people are actively searching for repositories that can make their own AI/agentic workflows faster and better. But does that actually mean these repositories are being used more or is the star growth mainly short-term hype, while legacy ML repositories grow slower but more sustainably, with people genuinely using them rather than just bookmarking them until the next cool thing emerges? I wanted to find out, and build a portfolio project along the way that lets me apply data engineering and statistical analysis skills on something I'm genuinely passionate about.
+
+- Research Questions:
+  - **1. Star Trajectory:**
+    -> Research Question: "How does star growth velocity evolve over the first 12 to 24 months of a repository's lifespan, and does this trajectory differ systematically between LLM/Agentic AI repositories and legacy ML repositories?
+    -> H₀: There is no significant difference in star growth velocity or trajectory shape between LLM/Agentic AI repositories and legacy ML repositories across the first 12 to 24 months of their lifespan.
+    -> H₁: LLM/Agentic AI repositories exhibit significantly higher initial star growth velocity followed by faster post-peak decay, compared to the more sustained growth pattern of legacy ML repositories.
+  - **2. Star-to-Commit-Ratio:**
+    -> RQ2: Do LLM/Agentic AI repositories exhibit a significantly higher cumulative commit-to-star ratio compared to legacy ML repositories over the first 12 to 24 months of their lifespan, and does this divergence increase over time?
+    -> H₀: There is no significant difference in the commit-to-star ratio between LLM/Agentic AI repositories and legacy ML repositories at any point within the first 12-24 months.
+    -> H₁: Legacy ML repositories exhibit a significantly higher commit-to-star ratio than LLM/Agentic AI repositories, with this gap widening as repository age increases.
+
+## Analysis Approach
+
+- Repo-age alignment: We will anchor each repo at its creation date (day 0) and compare trajectories over the first N months of life. PyTorch's first 24 months vs. LangChain's first 24 months.
+  - In the data tables, we will include the actual date (e.g. week) as well as the date index relative to the repo creation (Week 0, 1, 2, ...)
+- Requirement: at least 12 months of data for each repo since the creation of the repo (18 or 24 months is better, but most Agentic AI repositories were probably created in 2025 / 2026)
+- Statistical Tests:
+  - for Research Question 1:
+    -> Mann-Whitney U on average weekly star delta, computed separately for early (months 1–6), mid (7–12), and late (13–24) windows. Non-parametric, handles the skewed star distributions. Running it at three windows also lets you say something about whether differences emerge early or late.
+    -> Change-point detection (PELT or CUSUM) on each repo's weekly star velocity to locate the peak. You then compare the timing of the peak and the slope of decay after it between cohorts. The decay slope comparison itself is another Mann-Whitney U or a simple linear regression slope test.
+    -> Effect size: rank-biserial correlation (r) — always report this alongside Mann-Whitney. A p-value alone tells you the difference is real; effect size tells you how big it is, which matters much more for a portfolio narrative.
+  - for Research Question 2:
+    -> Mann-Whitney U on the cumulative star-to-commit ratio at months 12 and 24 — two separate tests, which lets you say whether the gap exists at 12 months and whether it widens by 24.
+    -> Log-transform the ratio first before any visualization or descriptive stats — it'll make your distributions interpretable and your charts readable.
+    -> Effect size: rank-biserial correlation (r) again.
+    -> Optionally, a Spearman correlation between repo age (in weeks) and star-to-commit ratio within each cohort separately — a rising Spearman r in the LLM cohort and a flat one in the legacy cohort would be clean evidence that the gap widens over time.
+
 # Tech Stack
 
 - Python for ingestion scripts — learning production-level Python, not notebooks
@@ -67,9 +99,3 @@ Wanted to create real-world dataset where data is not just suited for this useca
 # Data
 
 ## Why those specific columns and not others?
-
-# Analysis Approach
-
-## Why commits as proxy for development activity?
-
-Page Views and Repo Clones are only available to repo admins and were therefore disregarded.
