@@ -1,4 +1,4 @@
-from config import GITHUB_BASE_URL, HEADERS, LEGACY_REPOS, LLM_REPOS
+from ingestion.config import GITHUB_BASE_URL, HEADERS, LEGACY_REPOS, LLM_REPOS
 import requests
 import time
 from datetime import datetime, timezone
