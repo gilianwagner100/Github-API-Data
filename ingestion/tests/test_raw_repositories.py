@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import patch, MagicMock
-from ingestion.raw_repositories import get_repository_data
+from raw_repositories import get_repository_data
 
 def make_response(status_code, headers=None, json_data=None):
     "Helper to make response to avoid repeated response for every test"
