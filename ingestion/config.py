@@ -5,10 +5,6 @@ load_dotenv()
 
 # Github
 GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN")
-
-if not GITHUB_TOKEN:
-    raise EnvironmentError("GITHUB_TOKEN is not set. Check your .env file.")
-
 GITHUB_BASE_URL = "https://api.github.com"
 HEADERS = {
     "Authorization": f"Bearer {GITHUB_TOKEN}",
