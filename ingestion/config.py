@@ -13,7 +13,8 @@ HEADERS = {
 }
 
 # GCP / BigQuery
-
+GCP_PROJECT_ID = os.environ.get("GCP_PROJECT_ID")
+BQ_DATASET = os.environ.get("BQ_DATASET", "raw")
 
 # Repo Lists
 LEGACY_REPOS = ['fastmachinelearning/hls4ml', 'elyra-ai/elyra', 'brannondorsey/PassGAN', 'r9y9/deepvoice3_pytorch', 'robertmartin8/MachineLearningStocks', 'neonwatty/machine-learning-refined', 'VivekPa/AIAlpha', 'jakeret/tf_unet', 'GPflow/GPflow', 'AutoViML/AutoViz', 'Theano/Theano', 'google-deepmind/sonnet', 'drivendataorg/cookiecutter-data-science', 'vwxyzjn/cleanrl', 'yzhao062/pyod', 'pycaret/pycaret', 'sktime/sktime', 'tflearn/tflearn', 'MorvanZhou/Reinforcement-learning-with-tensorflow', 'unit8co/darts', 'apache/airflow', 'streamlit/streamlit', 'gradio-app/gradio', 'ray-project/ray', 'explosion/spaCy', 'eriklindernoren/ML-From-Scratch', 'Lightning-AI/pytorch-lightning', 'donnemartin/data-science-ipython-notebooks', 'd2l-ai/d2l-en', 'mlflow/mlflow', 'pytorch/pytorch', 'd2l-ai/d2l-zh', 'scikit-learn/scikit-learn', 'keras-team/keras', 'ageitgey/face_recognition', 'deepfakes/faceswap']
