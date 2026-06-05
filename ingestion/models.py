@@ -13,10 +13,11 @@ class RepositoryRecord(BaseModel):
     topics: str  # stored as comma-separated string e.g. "deep-learning,gpu,python"
     created_at: datetime
     pushed_at: datetime
+    repo_category: str # 'legacy' or 'llm'
     load_timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
     @classmethod
-    def from_api_response(cls, data: dict) -> "RepositoryRecord":
+    def from_api_response(cls, data: dict, category: str) -> "RepositoryRecord":
         return cls(
             id=data["id"],
             name=data["name"],
@@ -29,4 +30,5 @@ class RepositoryRecord(BaseModel):
             topics=",".join(data.get("topics", [])),
             created_at=data["created_at"],
             pushed_at=data["pushed_at"],
+            repo_category=category
         )
