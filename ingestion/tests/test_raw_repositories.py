@@ -14,7 +14,7 @@ def test_successful_response():
     "Test successful 200 response"
     mock_200 = make_response(200, json_data={"full_name": "pytorch/pytorch"})
 
-    with patch("ingestion.raw_repositories.requests.get", return_value = mock_200):
+    with patch("ingestion.github_client.requests.get", return_value = mock_200):
         result = get_repository_data("pytorch/pytorch")
     
     assert result["full_name"] == "pytorch/pytorch"
@@ -24,7 +24,7 @@ def test_403_retry_after_response():
     mock_403 = make_response(403, headers = {"retry-after": "30", "x-ratelimit-remaining": "10"})
     mock_200 = make_response(200, json_data={"full_name": "pytorch/pytorch"})
 
-    with patch("ingestion.raw_repositories.requests.get", side_effect=[mock_403, mock_200]):
+    with patch("ingestion.github_client.requests.get", side_effect=[mock_403, mock_200]):
         with patch("time.sleep") as mock_sleep:
             result = get_repository_data("pytorch/pytorch")
 
@@ -41,7 +41,7 @@ def test_403_ratelimit_reset():
     })
     mock_200 = make_response(200, json_data={"full_name": "pytorch/pytorch"})
 
-    with patch("ingestion.raw_repositories.requests.get", side_effect=[mock_403, mock_200]):
+    with patch("ingestion.github_client.requests.get", side_effect=[mock_403, mock_200]):
         with patch("time.sleep") as mock_sleep:
             with patch("time.time", return_value=0):  # fixes time so sleep_for is predictable
                 result = get_repository_data("pytorch/pytorch")
@@ -53,7 +53,7 @@ def test_max_retries_exceeded():
     "Test behavior with secondary rate limit exceeded"
     mock_403 = make_response(403, headers={"x-ratelimit-remaining": "10"})
 
-    with patch("ingestion.raw_repositories.requests.get", return_value=mock_403):
+    with patch("ingestion.github_client.requests.get", return_value=mock_403):
         with patch("time.sleep"):
             with pytest.raises(Exception, match="max retries"):
                 get_repository_data("pytorch/pytorch", max_retries=3)
