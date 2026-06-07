@@ -32,3 +32,21 @@ class RepositoryRecord(BaseModel):
             pushed_at=data["pushed_at"],
             repo_category=category
         )
+
+class StarRecord(BaseModel):
+    repo_id: int
+    repo_full_name: str
+    user_id: int
+    user_login: str
+    starred_at: datetime
+    load_timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    
+    @classmethod
+    def from_api_response(cls, item: dict, repo_id: int, repo_full_name: str) -> "StarRecord":
+        return cls(
+            repo_id=repo_id,
+            repo_full_name=repo_full_name,
+            user_id=item["user"]["id"],
+            user_login=item["user"]["login"],
+            starred_at=item["starred_at"],
+        )

@@ -1,5 +1,6 @@
 from google.cloud import bigquery
 from ingestion.config import GCP_PROJECT_ID, BQ_DATASET
+from datetime import datetime
 import logging
 
 logger = logging.getLogger(__name__)
@@ -45,3 +46,15 @@ def write_records(
     job.result()  # waits for the job to complete
 
     logger.info(f"Inserted {len(rows)} rows into {full_table_id}")
+
+def get_latest_timestamp(client: bigquery.Client, table_id: str, repo_id: int, timestamp_column: str) -> datetime | None:
+    """Get the latest timestamp for a given repo from a raw table."""
+    full_table_id = f"{GCP_PROJECT_ID}.{BQ_DATASET}.{table_id}"
+    query = f"""
+        SELECT MAX({timestamp_column}) as latest
+        FROM `{full_table_id}`
+        WHERE repo_id = {repo_id}
+    """
+    result = client.query(query).result()
+    row = next(iter(result))
+    return row.latest  # returns None if table is empty
