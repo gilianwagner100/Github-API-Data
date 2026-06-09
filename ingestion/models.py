@@ -40,13 +40,35 @@ class StarRecord(BaseModel):
     user_login: str
     starred_at: datetime
     load_timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
-    
+
     @classmethod
-    def from_api_response(cls, item: dict, repo_id: int, repo_full_name: str) -> "StarRecord":
+    def from_api_response(cls, data: dict, repo_id: int, repo_full_name: str) -> "StarRecord":
         return cls(
             repo_id=repo_id,
             repo_full_name=repo_full_name,
-            user_id=item["user"]["id"],
-            user_login=item["user"]["login"],
-            starred_at=item["starred_at"],
+            user_id=data["user"]["id"],
+            user_login=data["user"]["login"],
+            starred_at=data["starred_at"]
+        )
+
+class CommitRecord(BaseModel):
+    sha: str
+    commit_date: datetime
+    author_id: int | None = None
+    author_login: str | None = None
+    committer_id: int | None = None
+    committer_login: str | None = None
+    repo_id: int
+    load_timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+    @classmethod
+    def from_api_response(cls, data: dict, repo_id: int) -> "CommitRecord":
+        return cls(
+            sha=data["sha"],
+            repo_id=repo_id,
+            commit_date=data.get("commit", {}).get("author", {}).get("date"),
+            author_id=data.get("author", {}).get("id"),
+            author_login=data.get("author", {}).get("login"),
+            committer_id=data.get("committer", {}).get("id"),
+            committer_login=data.get("committer", {}).get("login")
         )
