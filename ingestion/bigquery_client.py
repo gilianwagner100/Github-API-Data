@@ -1,6 +1,6 @@
 from google.cloud import bigquery
 from ingestion.config import GCP_PROJECT_ID, BQ_DATASET
-from datetime import datetime
+from datetime import datetime, timedelta
 import logging
 
 logger = logging.getLogger(__name__)
@@ -57,4 +57,8 @@ def get_latest_timestamp(client: bigquery.Client, table_id: str, repo_id: int, t
     """
     result = client.query(query).result()
     row = next(iter(result))
-    return row.latest  # returns None if table is empty
+
+    if row.latest is None:
+        return None
+
+    return row.latest + timedelta(seconds=1)

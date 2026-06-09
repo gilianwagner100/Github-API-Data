@@ -63,12 +63,15 @@ class CommitRecord(BaseModel):
 
     @classmethod
     def from_api_response(cls, data: dict, repo_id: int) -> "CommitRecord":
+        author = data.get("author")
+        committer = data.get("committer")
+
         return cls(
             sha=data["sha"],
-            repo_id=repo_id,
             commit_date=data.get("commit", {}).get("author", {}).get("date"),
-            author_id=data.get("author", {}).get("id"),
-            author_login=data.get("author", {}).get("login"),
-            committer_id=data.get("committer", {}).get("id"),
-            committer_login=data.get("committer", {}).get("login")
+            author_id=author["id"] if author else None,
+            author_login=author["login"] if author else None,
+            committer_id=committer["id"] if committer else None,
+            committer_login=committer["login"] if committer else None,
+            repo_id=repo_id,
         )
