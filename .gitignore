@@ -220,3 +220,6 @@ streamlit_app/.streamlit/secrets.toml
 
 # test folder to save preliminary results
 test_ignore/
+
+# Claude files
+Claude.md
