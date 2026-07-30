@@ -1,0 +1,10 @@
+version: 2
+
+sources:
+  - name: raw
+    database: github-api-project-497611
+    schema: raw
+    tables:
+      - name: raw_commit_activity
+      - name: raw_repositories
+      - name: raw_star_history
